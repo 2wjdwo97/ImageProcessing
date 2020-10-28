@@ -1,111 +1,40 @@
-/**
-  @file videocapture_basic.cpp
-  @brief A very basic sample for using VideoCapture and VideoWriter
-  @author PkLab.net
-  @date Aug 24, 2016
-*/
+#include "main.h"
 
-#include <opencv2/core.hpp>
-#include <opencv2/videoio.hpp>
-#include <opencv2/highgui.hpp>
-#include <iostream>
-#include <stdio.h>
-#include <utility>
-#include <cmath>
-#include <vector>
-
-#define RATIO 0.9
-
-using namespace cv;
-using namespace std;
-
-// 직선 방정식 ax + by + c = 0
-typedef struct line {
-    int a;
-    int b;
-    int c;
-}line;
-
-template <typename T>
-pair<int, int> getFarPoint(vector<pair<int, int>> points, T distFrom);
-line calcLineEquation(pair<int, int> point1, pair<int, int> point2);
-int calcDist(line lineEquation, pair<int, int> point);
-int calcDist(pair<int, int> point1, pair<int, int> point2);
 
 int main(int, char**)
 {
-   
-    return 0;
-}
+    vector<Mat> img_edge;
+    vector<pair<int, int>> edge0;
+    vector<pair<int, int>> edge1;
+    vector<pair<int, int>> edge2;
+    vector<pair<int, int>> edge3;
 
-// shape 결정하는 함수 return0 삼각형 return1 사각형
-int determineShape(vector<pair<int, int>> edgePoints) {
-    pair<int, int> firstCorner, secondCorner, thirdCorner, fourthCorner;
+    for (int i = 1; i <= 4; i++) {
+        Mat img = imread("C:\\input\\" + to_string(i) + ".jpg", IMREAD_GRAYSCALE);
 
-    firstCorner = getFarPoint(edgePoints, edgePoints.front());
-    secondCorner = getFarPoint(edgePoints, firstCorner);
-    thirdCorner = getFarPoint(edgePoints, calcLineEquation(firstCorner, secondCorner));
-    
-    int x1 = firstCorner.first;     int y1 = firstCorner.second;
-    int x2 = secondCorner.first;    int y2 = secondCorner.second;
-    int x3 = thirdCorner.first;     int y3 = thirdCorner.second;
-
-    int nMaxDim = 0;
-
-    for (vector<pair<int, int>>::iterator it = edgePoints.begin(); it != edgePoints.end(); ++it) {
-        int x = it->first;
-        int y = it->second;
-        int nDim = abs((x1 * y2 + x2 * y  + x  * y1) - (x2 * y1 + x  * y2 + x1 * y ))
-                 + abs((x1 * y  + x  * y3 + x3 * y1) - (x  * y1 + x3 * y  + x1 * y3))
-                 + abs((x  * y2 + x2 * y3 + x3 * y ) - (x2 * y  + x3 * y2 + x  * y3));
-        
-        if (nDim > nMaxDim)
-            nMaxDim = nDim;
-    }
-
-    float triDim = abs((x1 * y2 + x2 * y3 + x3 * y1) - (x2 * y1 + x3 * y2 + x1 * y3)) / 2;
-    float sqDim = (nMaxDim / 2 + triDim) / 2;
-
-    if (sqDim / triDim > RATIO)
-        return 0;  // triangle
-    else
-        return 1;  // square
-}
-
-// 직선 방정식 구하는 함수
-line calcLineEquation(pair<int, int> point1, pair<int, int> point2) {
-    line lineEquation;
-    lineEquation.a = point1.second - point2.second;
-    lineEquation.b = point2.first - point1.first;
-    lineEquation.c = (point2.second - point1.second) * point1.first - (point2.first - point1.first) * point1.second;
-    return lineEquation;
-}
-
-// 제일 멀리 떨어진 점 구하는 함수. distFrom - 점이나 직선 방정식 들어감
-template <typename T>
-pair<int, int> getFarPoint(vector<pair<int, int>> points, T distFrom) {
-    pair<int, int> maxPoint;
-    
-    int max = 0;
-    int temp = 0;
-
-    for (vector<pair<int, int>>::iterator it = points.begin(); it != points.end(); ++it) {
-        temp = calcDist(distFrom, *it);
-        if (temp > max) {
-            max = temp;
-            maxPoint = *it;
+        if (img.empty())
+        {
+            cout << "No Image:" + to_string(i) + ".jpg" << endl;
+            return -1;
         }
+
+        img_edge.push_back(detectEdge(img));
     }
+    
+    edge0 = getEdgeList(img_edge[0]);
+    edge1 = getEdgeList(img_edge[1]);
+    edge2 = getEdgeList(img_edge[2]);
+    edge3 = getEdgeList(img_edge[3]);
 
-    return maxPoint;
-}
+    //// edge vector 출력
+    // for (int i = 0; i < edge0.size(); i++)
+    //    cout << edge0[i].first << "," << edge0[i].second << endl;
+    
+    // image 출력
+    for (int i = 0; i < 4; i++)
+        imshow("Image" + to_string(i), img_edge[i]);
 
-// 두 점 사이의 거리 (비교하는 거라서 정확한 값은 아님)
-int calcDist(pair<int, int> point1, pair<int, int> point2) {
-    return pow(point2.first - point1.first, 2) + pow(point2.second - point1.second, 2);
-}
+    waitKey(0);
 
-// 직선과 점 사이의 거리 (비교하는 거라서 정확한 값은 아님)
-int calcDist(line lineEquation, pair<int, int> point) {
-    return abs(lineEquation.a * point.first + lineEquation.b * point.second + lineEquation.c);
+    return 0;
 }

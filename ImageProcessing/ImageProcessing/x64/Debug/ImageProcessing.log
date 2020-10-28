@@ -1,4 +1,2 @@
 ﻿  main.cpp
-C:\Users\LG\Desktop\imageProcess\ImageProcessing\ImageProcessing\ImageProcessing\main.cpp(66,18): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\LG\Desktop\imageProcess\ImageProcessing\ImageProcessing\ImageProcessing\main.cpp(105,48): warning C4244: 'return': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  ImageProcessing.vcxproj -> C:\Users\LG\Desktop\imageProcess\ImageProcessing\ImageProcessing\x64\Debug\ImageProcessing.exe
+  ImageProcessing.vcxproj -> C:\Users\kio10\Desktop\image2\ImageProcessing\ImageProcessing\x64\Debug\ImageProcessing.exe
