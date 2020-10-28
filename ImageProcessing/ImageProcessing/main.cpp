@@ -19,18 +19,18 @@
 using namespace cv;
 using namespace std;
 
-template <typename T>
-pair<int, int> getFarPoint(vector<pair<int, int>> points, T distFrom);
-line calcLineEquation(pair<int, int> point1, pair<int, int> point2);
-int calcDist(line lineEquation, pair<int, int> point);
-int calcDist(pair<int, int> point1, pair<int, int> point2);
-
 // 직선 방정식 ax + by + c = 0
 typedef struct line {
     int a;
     int b;
     int c;
 }line;
+
+template <typename T>
+pair<int, int> getFarPoint(vector<pair<int, int>> points, T distFrom);
+line calcLineEquation(pair<int, int> point1, pair<int, int> point2);
+int calcDist(line lineEquation, pair<int, int> point);
+int calcDist(pair<int, int> point1, pair<int, int> point2);
 
 int main(int, char**)
 {
@@ -52,7 +52,7 @@ int determineShape(vector<pair<int, int>> edgePoints) {
 
     int nMaxDim = 0;
 
-    for (vector<pair<int, int>>::iterator it = points.begin(); it != points.end(); ++it) {
+    for (vector<pair<int, int>>::iterator it = edgePoints.begin(); it != edgePoints.end(); ++it) {
         int x = it->first;
         int y = it->second;
         int nDim = abs((x1 * y2 + x2 * y  + x  * y1) - (x2 * y1 + x  * y2 + x1 * y ))
@@ -93,7 +93,7 @@ pair<int, int> getFarPoint(vector<pair<int, int>> points, T distFrom) {
         temp = calcDist(distFrom, *it);
         if (temp > max) {
             max = temp;
-            maxPoint = *it
+            maxPoint = *it;
         }
     }
 
