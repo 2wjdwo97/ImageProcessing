@@ -29,7 +29,7 @@ int determineShape(vector<pair<int, int>> edgePoints) {
     float triDim = abs((x1 * y2 + x2 * y3 + x3 * y1) - (x2 * y1 + x3 * y2 + x1 * y3)) / 2;
     float sqDim = (nMaxDim / 2 + triDim) / 2;
 
-    if (sqDim / triDim > RATIO)
+    if (triDim / sqDim > RATIO)
         return 0;  // triangle
     else
         return 1;  // square

@@ -21,6 +21,7 @@ typedef struct line {
 
 template <typename T>
 pair<int, int> getFarPoint(vector<pair<int, int>> points, T distFrom);
+int determineShape(vector<pair<int, int>> edgePoints);
 line calcLineEquation(pair<int, int> point1, pair<int, int> point2);
 int calcDist(line lineEquation, pair<int, int> point);
 int calcDist(pair<int, int> point1, pair<int, int> point2);
